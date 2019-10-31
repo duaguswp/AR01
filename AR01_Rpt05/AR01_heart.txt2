@@ -1,0 +1,69 @@
+// 0~9까지 LED 표시를 위한 상수
+const byte number[10] = { 
+  //dot  gfedcba
+  B00111111,  //0
+  B00000110,  //1
+  B01011011,  //2
+  B01001111,  //3
+  B01100110,  //4
+  B01101101,  //5
+  B01111101,  //6
+  B00000111,  //7
+  B01111111,  //8
+  B01101111,  //9
+};
+
+// 표시할 숫자 변수
+int count = 1;
+int fnd_index =13;  
+
+void setup()
+{
+  for(int i = 2; i <= 13; ++i){
+    pinMode(i, OUTPUT);
+  };
+  for(int i = 10; i <= 13; ++i){
+  digitalWrite(i, HIGH); //LOW);
+  };
+  
+}
+
+void loop()
+{
+  // count 변수값을 FND에 출력한다.
+  digitalWrite(fnd_index, LOW);
+  fndDisplay(count);
+  delay(1000);
+  
+  digitalWrite(fnd_index, HIGH);
+
+  if(count >= 4){
+    count = 1;
+    fnd_index=13;
+  }
+  else{
+    count++;
+    fnd_index--;
+  }
+  delay(1000);
+  // count 변수값이 0~9의 범위를 갖도록한다.  
+} 
+
+// LED 켜는 루틴
+void fndDisplay(int displayValue){  
+  // bitValue 변수를 선언한다.
+  boolean bitValue;
+
+  // 2~9번핀에 모두 LOW 신호를 줘서 소등시킨다.
+  for(int i=2; i<=9; ++i){  
+    digitalWrite(i, LOW);
+  };
+
+  for(int i=0; i<=7; ++i){
+  // number 상수의 하나의 비트값을 읽는다.
+     bitValue = bitRead(number[displayValue], i);
+  digitalWrite(i+2, bitValue);
+  // 앞서 읽은 비트값을 2~9번핀에 출력시킨다.
+              
+  };
+}
